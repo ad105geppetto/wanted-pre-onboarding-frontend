@@ -6,15 +6,15 @@ import axios from "axios";
 interface TodoItem {
   id: number;
   todo: string;
+  isCompleted: boolean;
 }
 
 function Todo() {
   const navigate = useNavigate();
   const [todoList, setTodoList] = useState<TodoItem[]>([]);
-  const [todoListCheck, setTodoListCheck] = useState<boolean[]>([]);
   const [todo, setTodo] = useState("");
   const [editTodo, setEditTodo] = useState("");
-  const [isEdit, setIsEdit] = useState(false);
+  const [isClickEditList, setIsClickEditList] = useState<boolean[]>([]);
 
   useEffect(() => {
     if (!window.localStorage.getItem("accessToken")) {
@@ -36,7 +36,12 @@ function Todo() {
     );
 
     setTodoList(result.data);
-    setTodoListCheck(Array(result.data.length).fill(false));
+    setIsClickEditList(Array(result.data.length).fill(false));
+  };
+
+  const onClickLogout = () => {
+    window.localStorage.removeItem("accessToken");
+    navigate("/");
   };
 
   const onChangeTodo = (event: ChangeEvent<HTMLInputElement>) => {
@@ -59,16 +64,39 @@ function Todo() {
     await fetchTodo();
   };
 
+  const handleCheckbox = (todo: TodoItem) => async () => {
+    await axios.put(
+      `https://www.pre-onboarding-selection-task.shop/todos/${todo.id}`,
+      {
+        todo: todo.todo,
+        isCompleted: !todo.isCompleted,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${window.localStorage.getItem("accessToken")}`,
+        },
+      }
+    );
+
+    const updatedTodoList = todoList.map((_todo, _index) =>
+      todo.id === _todo.id
+        ? { ..._todo, isCompleted: !todo.isCompleted }
+        : _todo
+    );
+
+    setTodoList(updatedTodoList);
+  };
+
   const onChangeEditTodo = (event: ChangeEvent<HTMLInputElement>) => {
     setEditTodo(event.target.value);
   };
 
-  const onClickEditTodo = (todoId: number) => async () => {
+  const onClickEditTodo = (todoId: number, index: number) => async () => {
     const result = await axios.put(
       `https://www.pre-onboarding-selection-task.shop/todos/${todoId}`,
       {
         todo: editTodo,
-        isCompleted: true,
+        isCompleted: false,
       },
       {
         headers: {
@@ -86,19 +114,31 @@ function Todo() {
       return todo;
     });
     setTodoList(updatedTodoList);
-    setTodoListCheck((prev) => prev.map(() => false));
+
+    setIsClickEditList((prev) =>
+      prev.map((el, _index) => (index === _index ? !el : el))
+    );
     setEditTodo("");
   };
 
   const onClickEditHandle = (index: number) => () => {
-    if (!todoListCheck[index]) return;
-    setIsEdit((prev) => !prev);
+    if (todoList[index].isCompleted) {
+      const updatedTodoList = todoList.map((_todo, _index) =>
+        index === _index ? { ..._todo, isCompleted: false } : _todo
+      );
+
+      setTodoList(updatedTodoList);
+    }
+
+    setIsClickEditList((prev) =>
+      prev.map((el, _index) => (index === _index ? !el : el))
+    );
   };
 
-  const onClickCancle = (index: number) => () => {
-    if (!todoListCheck[index]) return;
-    setIsEdit((prev) => !prev);
-    setTodoListCheck((prev) => prev.map(() => false));
+  const onClickCancel = (index: number) => () => {
+    setIsClickEditList((prev) =>
+      prev.map((el, _index) => (index === _index ? !el : el))
+    );
     setEditTodo("");
   };
 
@@ -113,19 +153,6 @@ function Todo() {
     );
 
     fetchTodo();
-  };
-
-  const handleCheckbox = (index: number) => () => {
-    const updatedTodoListCheck = todoListCheck.map((todoCheck, _index) =>
-      _index === index ? !todoCheck : todoCheck
-    );
-
-    setTodoListCheck(updatedTodoListCheck);
-  };
-
-  const onClickLogout = () => {
-    window.localStorage.removeItem("accessToken");
-    navigate("/");
   };
 
   return (
@@ -155,10 +182,10 @@ function Todo() {
               <label>
                 <input
                   type="checkbox"
-                  onChange={handleCheckbox(index)}
-                  checked={todoListCheck[index]}
+                  onChange={handleCheckbox(todo)}
+                  checked={todo.isCompleted}
                 />
-                {todoListCheck[index] && isEdit ? (
+                {isClickEditList[index] ? (
                   <S.EditTodoInput
                     data-testid="modify-input"
                     value={editTodo}
@@ -168,17 +195,17 @@ function Todo() {
                   <S.TodoContents>{todo.todo}</S.TodoContents>
                 )}
               </label>
-              {todoListCheck[index] && isEdit ? (
+              {isClickEditList[index] ? (
                 <S.ButtonWrapper>
                   <S.Button
                     data-testid="submit-button"
-                    onClick={onClickEditTodo(todo.id)}
+                    onClick={onClickEditTodo(todo.id, index)}
                   >
                     제출
                   </S.Button>
                   <S.Button
                     data-testid="cancel-button"
-                    onClick={onClickCancle(index)}
+                    onClick={onClickCancel(index)}
                   >
                     취소
                   </S.Button>

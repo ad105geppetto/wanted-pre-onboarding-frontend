@@ -1,7 +1,8 @@
 import * as S from "./signup.styles";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect, ChangeEvent } from "react";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
+import Modal from "../../commons/modal";
 
 function Signup() {
   const navigate = useNavigate();
@@ -9,6 +10,8 @@ function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [disabled, setDisabled] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     if (window.localStorage.getItem("accessToken")) {
@@ -53,12 +56,16 @@ function Signup() {
 
       navigate("/signin");
     } catch (error) {
-      if (error instanceof Error) console.log(error.message);
+      if (error instanceof AxiosError) {
+        setIsOpen(true);
+        setMessage(error.response?.data.message);
+      }
     }
   };
 
   return (
     <S.Container>
+      <Modal isOpen={isOpen} setIsOpen={setIsOpen} message={message} />
       <S.Wrapper>
         <S.BackButton onClick={() => navigate(-1)}>
           <S.Arrow></S.Arrow>

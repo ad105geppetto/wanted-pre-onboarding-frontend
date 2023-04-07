@@ -1,41 +1,57 @@
+<img src="https://capsule-render.vercel.app/api?type=waving&color=auto&height=150&section=header" />
+
 ## 🐋 Welcome
 
 **본 레포지토리는 원티드 프리온보딩 프론트엔드 과정 선발 과제를 위한 기록들을 남긴 곳입니다.**
 
-<br/>
+## 목차
 
-## ✏️ 목차
+1. [Intro](#intro)
+2. [배포 링크](#배포-링크)
+3. [실행 방법](#실행-방법)
+4. [사용 스택](#사용-스택)
+5. [과제 수행](#과제-수행)
+6. [Commit Convention](#commit-convention)
 
-1. [Intro](##Intro)
-2. [사용 스택](##사용-스택)
-3. [과제 수행](##과제-수행)
-4. [Commit Convention](##commit-convention)
-
-<br/>
-
-## ✏️ Intro
+## Intro
 
 **프리온보딩 프론트엔드 선발 과제 링크**
 
 [https://github.com/walking-sunset/selection-task](https://github.com/walking-sunset/selection-task)
 
-<br/>
+## 배포 링크
 
-## ✏️ 사용 스택
+[https://todoify.pages.dev](https://todoify.pages.dev)
 
-<img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=React&logoColor=white">
+## 실행 방법
+
+1. 설치 명령어
+
+```bash
+$ npm install
+```
+
+2. 실행 명령어
+
+```bash
+$ npm start
+```
+
+## 사용 스택
+
+<div align=left>
+  <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=React&logoColor=white">
   <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=TypeScript&logoColor=white">
   <img src="https://img.shields.io/badge/reactrouter-CA4245?style=for-the-badge&logo=reactrouter&logoColor=white">
   <img src="https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=Axios&logoColor=white">
   <img src="https://img.shields.io/badge/styledcomponents-DB7093?style=for-the-badge&logo=styledcomponents&logoColor=white">
+</div>
 
-<br/>
-
-## ✏️ 과제 수행
-
----
+## 과제 수행
 
 :: 1. 로그인 / 회원가입
+
+<img src="https://user-images.githubusercontent.com/92367032/230540517-56c44ed3-323c-4fbb-a070-4f89a21741c0.gif" />
 
 1-1. 회원가입 및 로그인 페이지 추가
 
@@ -66,6 +82,8 @@
 ---
 
 :: 2. TODO LIST
+
+<img src="https://user-images.githubusercontent.com/92367032/230540510-465c8f59-d314-41e0-ab47-03da18548450.gif" />
 
 2-1. TODO 목록 페이지 추가
 
@@ -107,9 +125,7 @@
 
 ---
 
-<br/>
-
-## ✏️ Commit Convention
+## Commit Convention
 
 - init : 초기화
 - feat : 새로운 기능 추가
@@ -121,3 +137,5 @@
 - refactor : 코드 리팩터링
 - test : 테스트 코드, 리팩터링 테스트 코드 추가
 - chore : 빌드 업무 수정, 패키지 매니저 수정, 그 외 자잘한 수정에 대한 커밋
+
+<img src="https://capsule-render.vercel.app/api?type=waving&color=auto&height=150&section=footer" />
